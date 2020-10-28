@@ -14,7 +14,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.NONE)
 public class ProductXmlPromDto {
 
-    @XmlAttribute(name = "id")
+    @XmlAttribute(name  = "id")
     private long id;
 
     @XmlAttribute(name = "available")
@@ -30,6 +30,7 @@ public class ProductXmlPromDto {
 //    @XmlAttribute(name = "group_id")
 //    private int groupId;
 //
+
     @XmlElement(name = "name")
     private String name;
 
@@ -67,12 +68,14 @@ public class ProductXmlPromDto {
     @XmlElement(name = "discount")
     private int discount;
 
+    //!!!!!
     @XmlElement(name = "currencyId")
     private String currency;
 
     @XmlElement(name = "picture")
     private List<String> pictures;
 
+    //!!!!!
     @XmlElement(name = "vendor")
     private String vendor;
 

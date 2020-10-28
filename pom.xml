@@ -11,8 +11,8 @@
 	<groupId>com</groupId>
 	<artifactId>co2AutomaticCrm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>co2AutomaticCrm</name>
-	<description></description>
+	<name>chiShoAutom</name>
+	<description>Chi-Sho</description>
 
 	<properties>
 		<java.version>1.11</java.version>
@@ -111,6 +111,24 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>28.1-jre</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.13.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 
 	</dependencies>

@@ -10,6 +10,10 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "param")
 @XmlAccessorType(XmlAccessType.NONE)
 public class ProductParamXmlPromDto {
+    public ProductParamXmlPromDto(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
     @XmlAttribute(name = "name")
     private String name;

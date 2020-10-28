@@ -15,7 +15,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 
 @Component
 public class ProductStoreCsvCorrectionsUploaderImpl implements ProductStoreCsvCorrectionsUploader {

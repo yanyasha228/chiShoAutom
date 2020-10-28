@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableScheduling
 @ComponentScan
+@EnableAsync
 @PropertySource("classpath:rest_prom_api.properties")
 @PropertySource("classpath:rest_bitrix_api.properties")
 @PropertySource("classpath:co2.properties")
