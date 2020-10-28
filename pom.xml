@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com</groupId>
-	<artifactId>co2AutomaticCrm</artifactId>
+	<artifactId>chiShoAutom</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>chiShoAutom</name>
 	<description>Chi-Sho</description>
