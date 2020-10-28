@@ -53,20 +53,28 @@ public class ParseServiceUtils {
 //
 //    }
 
-    private static List<String> generateKeyWordsFromName(String name){
+    private static List<String> generateKeyWordsFromName(String name, String externalId) {
 
+        //Exc
+        //",
+        String[] badEndTiedChars = {"." , ",", ";" , ":" , "\""};
+        String[] badUntiedChars = {"(", ")", "", "" , "\""};
+        String[] badChars = {"-", "–", "!", ":", "(", ")", "|", ";", "\"" , ","};
+
+        String[] badWords = {"с", "для", "из", "на", "под", "по", "от", "в", "и", "типа", "к"};
 
 
         String[] wordsSet = name.split(" ");
 
         List<String> keyWords = Arrays.asList(wordsSet);
 
-        for(int i = 0; i < wordsSet.length - 1 ; i++){
+        for (int i = 0; i < wordsSet.length - 1; i++) {
             keyWords.add(wordsSet[i]);
-        };
+        }
+        ;
 
         return null;
-        
+
     }
 
     private static String removeTrashCharsFromPriceString(String strForCl) {

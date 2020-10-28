@@ -15,6 +15,7 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     @Autowired
     private ParseServiceUtils parseServiceUtils;
     public static String AVAILABILITY_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > span.price.nowrap.not-aviable";
+    public static String AVAILABILITY_2_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > div.out-of-stock";
     public static String NAME_CSS_QUERY = "#cart-form > div.product-name > h1";
     public static String PRICE_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > span.price.nowrap";
     public static String PICTURES_CSS_QUERY = "body > div.main-block > div > div:nth-child(3) > div > article > div.product-image > div";
