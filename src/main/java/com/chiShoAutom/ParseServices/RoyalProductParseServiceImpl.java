@@ -1,5 +1,6 @@
 package com.chiShoAutom.ParseServices;
 
+import com.chiShoAutom.Models.ParseModels.ParseProduct;
 import com.chiShoAutom.Models.Product;
 import com.chiShoAutom.ParsUtils.CssQueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     public static String PICTURES_CSS_QUERY = "body > div.main-block > div > div:nth-child(3) > div > article > div.product-image > div";
     public static String CHARACTERISTIC_TABLE_CSS_QUERY = "#product-features";
     public static String VENDOR_CODE = "#cart-form > span";
+
     ////!!!!!
+
     public static String DESCRIPTION_CSS_QUERY = "#tabs-description > p:nth-child(2)";
 
 
@@ -30,12 +33,20 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     private CssQueryParser cssQueryParser;
 
     @Override
-    public Optional<Product> getProduct(String productUrl) {
+    public Optional<ParseProduct> getProduct(String productUrl) {
         return Optional.empty();
     }
 
     @Override
-    public List<Product> getProducts(List<String> productUrls) {
+    public List<ParseProduct> getProducts(List<String> productUrls) {
+
+        for(String productUrl : productUrls){
+
+        }
+
         return null;
+
     }
+
+
 }

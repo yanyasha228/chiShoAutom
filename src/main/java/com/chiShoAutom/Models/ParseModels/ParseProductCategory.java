@@ -20,8 +20,15 @@ public class ParseProductCategory {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
+    @JoinColumn(name = "parent_category_id")
     private ParseProductCategory parentCategory;
+
+    @OneToOne
+    @JoinColumn(name = "shop_id")
+    private ParseShop parseShop;
+
+    @Column(name = "category_url")
+    private String categoryUrl;
 
 
 }

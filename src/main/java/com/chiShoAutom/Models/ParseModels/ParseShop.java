@@ -25,6 +25,14 @@ public class ParseShop {
     @Column(name = "shop_url")
     private String shopUrl;
 
+    @Column(name = "product_url")
+    private String productUrl;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "category_id")
+    private List<ParseProductCategory> shopCategories;
+
 
 
 

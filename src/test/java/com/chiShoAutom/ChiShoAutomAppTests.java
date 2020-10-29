@@ -1,6 +1,7 @@
 package com.chiShoAutom;
 
 import com.chiShoAutom.ParsUtils.CssQueryParser;
+import com.chiShoAutom.ParseServices.RoyalCategoryParseServiceImpl;
 import com.chiShoAutom.TestDir.TestParse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,16 @@ public class ChiShoAutomAppTests {
 
     @Autowired
     private ThreadPoolTaskExecutor executor;
+
+    @Autowired
+    private RoyalCategoryParseServiceImpl royalCategoryParseService;
+
+    @Test
+    public void parseRoyalCategoryTest() throws IOException {
+
+        royalCategoryParseService.parseAndSaveCategories();
+        int i = 0;
+    }
 
     @Test
     public void contextLoads() throws IOException, InterruptedException {

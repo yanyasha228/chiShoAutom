@@ -28,8 +28,9 @@ public class ParseProductCategoryToCategoryPromXmlDto implements Mapper<ParsePro
 
             Optional<ParseProductCategory> parseProductCategoryOld = parseProductCategoryService.findById(parseProductCategory.getId());
             if (parseProductCategoryOld.isPresent()) {
-                Optional<ParseProductCategory> parseProductCategoryParent = parseProductCategoryService.findById(Long.valueOf(dto.getParentId()));
-                parseProductCategoryParent.ifPresent(parseProductCategory::setParentCategory);
+                parseProductCategory.setParentCategory(parseProductCategoryOld.get().getParentCategory());
+                parseProductCategory.setParseShop(parseProductCategoryOld.get().getParseShop());
+
             }
         }
         return parseProductCategory;
@@ -37,8 +38,8 @@ public class ParseProductCategoryToCategoryPromXmlDto implements Mapper<ParsePro
 
     @Override
     public CategoryPromXmlDto toDto(ParseProductCategory entity) {
-        if(Objects.isNull(entity)) return null;
-        CategoryPromXmlDto categoryPromXmlDto = mapper.map(entity,CategoryPromXmlDto.class);
+        if (Objects.isNull(entity)) return null;
+        CategoryPromXmlDto categoryPromXmlDto = mapper.map(entity, CategoryPromXmlDto.class);
 //        categoryPromXmlDto.setParentId(entity.getParentCategory().getId());
         return null;
     }
