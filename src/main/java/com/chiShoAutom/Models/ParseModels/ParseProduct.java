@@ -19,4 +19,12 @@ public class ParseProduct {
     @JoinColumn(name = "parse_shop_id")
     private ParseShop parseShop;
 
+    @Column(name = "product_url")
+    private String productUrl;
+
+//    @Column(name = "")
+//    private
+
+
+
 }
