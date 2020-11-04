@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.MalformedInputException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -24,23 +25,18 @@ public class CssQueryParserImpl implements CssQueryParser {
     public CssQueryParserImpl() {
     }
 
+    @Override
     public Elements getElements(String url, String cssQuery) throws IOException {
-        Document doc;
+        Optional<Document> doc = getDocument(url);
 
-        try {
-            doc = Jsoup.connect(url).timeout(30000).ignoreHttpErrors(true).get();
-        } catch (MalformedInputException e) {
-            return null;
-        }
-
-        return doc.select(cssQuery);
-
+        return doc.map(document -> document.select(cssQuery)).orElse(null);
 
     }
 
-    public Optional<String> getFirstElementValue(String url, String cssQuery) throws IOException {
+    @Override
+    public Optional<Document> getDocument(String url) throws IOException {
 
-        Document doc;
+        Document doc = null;
 
         try {
             doc = Jsoup.connect(url).timeout(30000).ignoreHttpErrors(true).get();
@@ -61,11 +57,37 @@ public class CssQueryParserImpl implements CssQueryParser {
             System.out.println("Returning null");
             return Optional.empty();
         }
-        Elements ells = doc.select(cssQuery);
 
-        Element ell = ells.first();
+        return Optional.of(doc);
 
-        if (ell != null) return Optional.of(ell.text());
+    }
+
+    @Override
+    public Optional<String> getFirstElementValue(Document document, String cssQuery) throws IOException {
+
+        if (Objects.nonNull(document)) {
+
+            Elements ells = document.select(cssQuery);
+
+            Element ell = ells.first();
+
+            if (ell != null) return Optional.ofNullable(ell.text());
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> getFirstElementValue(String url, String cssQuery) throws IOException {
+
+        Optional<Document> doc = getDocument(url);
+
+        if (doc.isPresent()) {
+
+            Elements ells = doc.get().select(cssQuery);
+
+            Element ell = ells.first();
+
+            if (ell != null) return Optional.ofNullable(ell.text());
+        }
 
         return Optional.empty();
     }

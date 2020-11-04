@@ -3,9 +3,11 @@ package com.chiShoAutom.ParseServices;
 import com.chiShoAutom.Models.ParseModels.ParseProduct;
 import com.chiShoAutom.Models.Product;
 import com.chiShoAutom.ParsUtils.CssQueryParser;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,19 +30,41 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     public static String DESCRIPTION_CSS_QUERY = "#tabs-description > p:nth-child(2)";
 
 
-
     @Autowired
     private CssQueryParser cssQueryParser;
 
     @Override
-    public Optional<ParseProduct> getProduct(String productUrl) {
+    public Optional<ParseProduct> getProduct(String productUrl) throws IOException {
+
+        Optional<Document> pageDoc = cssQueryParser.getDocument(productUrl);
+
+        if (pageDoc.isPresent()) {
+
+            ParseProduct parseProduct = new ParseProduct();
+
+            parseProduct.setVendorCode(getVendorCode(pageDoc.get()));
+
+            return Optional.of(parseProduct);
+        }
+
         return Optional.empty();
+
     }
 
     @Override
-    public List<ParseProduct> getProducts(List<String> productUrls) {
+    public List<ParseProduct> getProducts(List<String> productUrls) throws IOException {
 
-        for(String productUrl : productUrls){
+        for (String productUrl : productUrls) {
+
+            Optional<Document> pageDoc = cssQueryParser.getDocument(productUrl);
+
+            if (pageDoc.isPresent()) {
+
+                ParseProduct parseProduct = new ParseProduct();
+
+                parseProduct.setVendorCode(getVendorCode(pageDoc.get()));
+
+            }
 
         }
 
@@ -48,5 +72,19 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
     }
 
+    private String getVendorCode(Document document) throws IOException {
 
+        String strToRemove = "Артикул:";
+
+        Optional<String> vendorCodeOpt = cssQueryParser.getFirstElementValue(document, VENDOR_CODE);
+
+        if (vendorCodeOpt.isPresent()) {
+
+            String validVendorCode = vendorCodeOpt.get().replaceAll(strToRemove, "");
+            validVendorCode = validVendorCode.trim();
+            return validVendorCode;
+        }
+
+        return "";
+    }
 }

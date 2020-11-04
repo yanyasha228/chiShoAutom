@@ -1,7 +1,9 @@
 package com.chiShoAutom;
 
+import com.chiShoAutom.Models.ParseModels.ParseProduct;
 import com.chiShoAutom.ParsUtils.CssQueryParser;
 import com.chiShoAutom.ParseServices.RoyalCategoryParseServiceImpl;
+import com.chiShoAutom.ParseServices.RoyalProductParseServiceImpl;
 import com.chiShoAutom.TestDir.TestParse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,10 +31,13 @@ public class ChiShoAutomAppTests {
     @Autowired
     private RoyalCategoryParseServiceImpl royalCategoryParseService;
 
+    @Autowired
+    private RoyalProductParseServiceImpl royalProductParseService;
+
     @Test
     public void parseRoyalCategoryTest() throws IOException {
 
-        royalCategoryParseService.parseAndSaveCategories();
+        Optional<ParseProduct> parseProduct = royalProductParseService.getProduct("https://goodtoys.com.ua/product/igrovoy-centr-57162-2sht-rybalka-218-188-99sm-basseyn-gorka-fontan-182l-ot3let-slivklap-remkomplek/");
         int i = 0;
     }
 
