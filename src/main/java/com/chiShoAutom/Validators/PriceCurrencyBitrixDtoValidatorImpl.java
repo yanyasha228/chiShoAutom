@@ -12,10 +12,8 @@ import java.util.Optional;
 @Component
 public class PriceCurrencyBitrixDtoValidatorImpl implements PriceCurrencyBitrixDtoValidator {
 
-
     @Autowired
     private AppSettingsService appSettingsService;
-
 
     @Override
     public ProductRestBitrixDto convertProductDtoCurrencyToUAH(ProductRestBitrixDto productRestBitrixDto) {

@@ -39,6 +39,7 @@ public class ChiShoAutomAppTests {
 
         Optional<ParseProduct> parseProduct = royalProductParseService.getProduct("https://goodtoys.com.ua/product/igrovoy-centr-57162-2sht-rybalka-218-188-99sm-basseyn-gorka-fontan-182l-ot3let-slivklap-remkomplek/");
         int i = 0;
+
     }
 
     @Test

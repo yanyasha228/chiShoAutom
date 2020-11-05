@@ -14,7 +14,6 @@ public class ParseProductCategoryServiceImpl implements ParseProductCategoryServ
     @Autowired
     private ParseProductCategoryDao parseProductCategoryDao;
 
-
     @Override
     public Optional<ParseProductCategory> findById(Long id) {
         return parseProductCategoryDao.findById(id);
@@ -34,4 +33,5 @@ public class ParseProductCategoryServiceImpl implements ParseProductCategoryServ
     public ParseProductCategory save(ParseProductCategory parseProductCategory) {
         return parseProductCategoryDao.save(parseProductCategory);
     }
+
 }

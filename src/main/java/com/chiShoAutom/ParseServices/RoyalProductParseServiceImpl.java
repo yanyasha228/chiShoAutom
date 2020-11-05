@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoyalProductParseServiceImpl implements ProductParseService {
@@ -17,6 +20,7 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
     @Autowired
     private ParseServiceUtils parseServiceUtils;
+
     public static String AVAILABILITY_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > span.price.nowrap.not-aviable";
     public static String AVAILABILITY_2_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > div.out-of-stock";
     public static String NAME_CSS_QUERY = "#cart-form > div.product-name > h1";
@@ -44,7 +48,10 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
             parseProduct.setVendorCode(getVendorCode(pageDoc.get()));
 
+            parseProduct.setUrl(productUrl);
+
             return Optional.of(parseProduct);
+
         }
 
         return Optional.empty();
@@ -83,6 +90,38 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
             String validVendorCode = vendorCodeOpt.get().replaceAll(strToRemove, "");
             validVendorCode = validVendorCode.trim();
             return validVendorCode;
+
+        }
+
+        return "";
+    }
+
+    private String getName(Document document, String vendorCode) throws IOException {
+
+        String[] vendorCodeSplited = vendorCode.split(" ");
+
+        Optional<String> nameOpt = cssQueryParser.getFirstElementValue(document, NAME_CSS_QUERY);
+
+        if(nameOpt.isPresent()){
+
+            String name = nameOpt.get().replaceAll(vendorCode , "");
+
+            String[] splitedName = name.split(" ");
+
+            List<String> string = Arrays.stream(splitedName).filter(s -> {
+
+                return false;
+
+            }).collect(Collectors.toList());
+
+            for (String strN :
+                    splitedName) {
+                for (String strV :
+                        vendorCodeSplited) {
+
+                }
+            }
+                    
         }
 
         return "";

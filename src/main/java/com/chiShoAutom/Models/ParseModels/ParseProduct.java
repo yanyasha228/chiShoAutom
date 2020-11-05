@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -61,5 +61,8 @@ public class ParseProduct {
     @Column(name = "country_of_origin")
     private String countryOfOrigin;
 
+    @Column(name = "params")
+    @ElementCollection
+    private Map<String, String> params;
 
 }
