@@ -37,7 +37,7 @@ public class ChiShoAutomAppTests {
     @Test
     public void parseRoyalCategoryTest() throws IOException {
 
-        Optional<ParseProduct> parseProduct = royalProductParseService.getProduct("https://goodtoys.com.ua/product/igrovoy-centr-57162-2sht-rybalka-218-188-99sm-basseyn-gorka-fontan-182l-ot3let-slivklap-remkomplek/");
+        Optional<ParseProduct> parseProduct = royalProductParseService.getProduct("https://goodtoys.com.ua/product/konstruktor-cic-21-615-robot-14-v-1-na-solnechnyh-batareyah/");
         int i = 0;
 
     }

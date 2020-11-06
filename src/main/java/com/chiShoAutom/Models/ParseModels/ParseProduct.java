@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -44,7 +43,7 @@ public class ParseProduct {
 
     @Column(name = "pictures")
     @ElementCollection
-    private List<String> pictures;
+    private Set<String> pictures = new HashSet<>();
 
     @Column(name = "description")
     private String description;
@@ -63,6 +62,10 @@ public class ParseProduct {
 
     @Column(name = "params")
     @ElementCollection
-    private Map<String, String> params;
+    private Map<String, String> params = new HashMap<>();
+
+    @Column(name = "video_urls")
+    @ElementCollection
+    private Set<String> videos= new HashSet<>();
 
 }
