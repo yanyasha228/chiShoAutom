@@ -1,6 +1,6 @@
 package com.chiShoAutom.Services.ParseModelsServices;
 
-import com.chiShoAutom.Dao.ParseProductCategoryDao;
+import com.chiShoAutom.Dao.ParseModelsDao.ParseProductCategoryDao;
 import com.chiShoAutom.Models.ParseModels.ParseProductCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

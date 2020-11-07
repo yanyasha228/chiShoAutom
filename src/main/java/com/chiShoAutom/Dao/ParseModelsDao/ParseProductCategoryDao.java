@@ -1,4 +1,4 @@
-package com.chiShoAutom.Dao;
+package com.chiShoAutom.Dao.ParseModelsDao;
 
 import com.chiShoAutom.Models.ParseModels.ParseProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.chiShoAutom.Dao;
+package com.chiShoAutom.Dao.ParseModelsDao;
 
 import com.chiShoAutom.Models.ParseModels.ParseProduct;
 import com.chiShoAutom.Models.ParseModels.ParseShop;

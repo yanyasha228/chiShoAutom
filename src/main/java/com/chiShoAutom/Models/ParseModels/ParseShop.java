@@ -16,7 +16,7 @@ public class ParseShop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "parseShop", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -25,8 +25,8 @@ public class ParseShop {
     @Column(name = "shop_url")
     private String shopUrl;
 
-    @Column(name = "product_url")
-    private String productUrl;
+    @Column(name = "whole_shop_url")
+    private String wholeShopUrl;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

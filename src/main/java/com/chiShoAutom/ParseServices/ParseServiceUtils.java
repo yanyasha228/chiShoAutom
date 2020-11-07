@@ -53,7 +53,7 @@ public class ParseServiceUtils {
 //
 //    }
 
-    private static List<String> generateKeyWordsFromName(String name, String externalId) {
+    public static List<String> generateKeyWordsFromName(String name, String externalId) {
 
         //Exc
         //",
@@ -77,7 +77,7 @@ public class ParseServiceUtils {
 
     }
 
-    private static String removeTrashCharsFromPriceString(String strForCl) {
+    public static String removeTrashCharsFromPriceString(String strForCl) {
 
         String retString = strForCl.replaceAll("[^\\d.,]", "");
 
