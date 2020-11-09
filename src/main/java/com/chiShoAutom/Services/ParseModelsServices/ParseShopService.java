@@ -11,5 +11,7 @@ public interface ParseShopService {
 
     List<ParseShop> findAll();
 
+    ParseShop save(ParseShop parseShop);
+
 
 }

@@ -24,4 +24,9 @@ public class ParseShopServiceImpl implements ParseShopService {
         return parseShopDao.findAll();
     }
 
+    @Override
+    public ParseShop save(ParseShop parseShop) {
+        return parseShopDao.save(parseShop);
+    }
+
 }

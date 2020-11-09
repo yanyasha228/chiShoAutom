@@ -36,7 +36,7 @@ public class SyncTasksSchedulerImpl implements SyncTasksScheduler {
 //
 //    }
 
-    @Scheduled(cron = "0 0 17 * * ?")
+//    @Scheduled(cron = "0 0 17 * * ?")
     @Override
     public void countManagersDailySalary() {
         logger.error("Start countManagersDailySalary() : " + LocalTime.now());

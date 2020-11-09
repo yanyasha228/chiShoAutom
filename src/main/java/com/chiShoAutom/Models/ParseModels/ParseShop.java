@@ -6,7 +6,9 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class ParseShop {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "parseShop", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ParseProduct> parseProducts;
+    private Set<ParseProduct> parseProducts;
 
     @Column(name = "shop_url")
     private String shopUrl;
@@ -31,7 +33,7 @@ public class ParseShop {
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "category_id")
-    private List<ParseProductCategory> shopCategories;
+    private Set<ParseProductCategory> shopCategories = new HashSet<>();
 
 
 

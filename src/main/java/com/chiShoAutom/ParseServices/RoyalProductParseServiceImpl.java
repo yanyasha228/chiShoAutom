@@ -3,8 +3,10 @@ package com.chiShoAutom.ParseServices;
 import com.chiShoAutom.Models.ModelEnums.Currency;
 import com.chiShoAutom.Models.ParseModels.ParseProduct;
 import com.chiShoAutom.Models.ParseModels.ParseProductCategory;
+import com.chiShoAutom.Models.ParseModels.ParseShop;
 import com.chiShoAutom.ParsUtils.CssQueryParser;
 import com.chiShoAutom.Services.ParseModelsServices.ParseProductCategoryService;
+import com.chiShoAutom.Services.ParseModelsServices.ParseShopService;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,11 +22,6 @@ import java.util.stream.Collectors;
 public class RoyalProductParseServiceImpl implements ProductParseService {
 
 
-    @Autowired
-    private ParseServiceUtils parseServiceUtils;
-
-    private ParseProductCategoryService parseProductCategoryService;
-    public static final String AVAILABILITY_2_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > div.out-of-stock";
     public static final String NAME_CSS_QUERY = "#cart-form > div.product-name > h1";
     public static final String AVAILABILITY_FLAG_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > span.price.nowrap.not-aviable";
     public static final String PRICE_CSS_QUERY = "#cart-form > div.add2cart.mainPrice > span.price.nowrap";
@@ -45,13 +42,40 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     public static String VIDEOS_DIV = "#overview > div.product-video";
     ////!!!!!
 
+    @Autowired
+    private ParseServiceUtils parseServiceUtils;
+
+    @Autowired
+    private ParseProductCategoryService parseProductCategoryService;
 
     @Autowired
     private CssQueryParser cssQueryParser;
 
+    @Autowired
+    private ParseShopService parseShopService;
+
+
+    private ParseShop getOrCreateParseShop() {
+
+        Optional<ParseShop> royalParseShop = parseShopService.findByShopUrl(GOOD_TOYS_URL);
+
+        if(royalParseShop.isPresent()) return royalParseShop.get();
+
+        ParseShop parseShop = new ParseShop();
+
+        parseShop.setShopUrl(GOOD_TOYS_URL);
+
+        parseShop.setWholeShopUrl(ROYAL_TOYS_URL);
+
+        return  parseShopService.save(parseShop);
+
+    }
+
 
     @Override
     public Optional<ParseProduct> getProduct(String productUrl) throws IOException {
+
+        ParseShop royalParseShop = getOrCreateParseShop();
 
         Optional<Document> pageDoc = cssQueryParser.getDocument(productUrl);
 
@@ -85,6 +109,10 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
             parseProduct.setAvailability(checkAvailability(pageDoc.get()));
 
+            parseProduct.setParseProductCategory(getCategories(pageDoc.get()));
+
+            parseProduct.setParseShop(royalParseShop);
+
 
             return Optional.of(parseProduct);
 
@@ -116,26 +144,67 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     }
 
 
-    private List<ParseProductCategory> getCategories(Document document) {
+    private ParseProductCategory getCategories(Document document) {
 
         Element categoryBlockElem = document.selectFirst(CATEGORIES_CSS_QUERY);
 
-        if (Objects.nonNull(categoryBlockElem)){
+        if (Objects.nonNull(categoryBlockElem)) {
 
             Elements categoriesElems = categoryBlockElem.select("li");
 
-            if(Objects.nonNull(categoriesElems) && !categoriesElems.isEmpty()){
+            if (Objects.nonNull(categoriesElems) && !categoriesElems.isEmpty()) {
 
+                List<Element> validCategories = categoriesElems.subList(1, categoriesElems.size() - 1);
+
+                List<ParseProductCategory> categoriesNames = validCategories.stream().map(element -> {
+                    ParseProductCategory parseProductCategory = new ParseProductCategory();
+
+                    parseProductCategory.setName(element.text().replaceAll("\\|", "").trim());
+
+                    Element linkEl = element.selectFirst("a");
+
+                    if (Objects.nonNull(linkEl)) parseProductCategory.setCategoryUrl(linkEl.attr("abs:href"));
+
+                    return parseProductCategory;
+
+                }).collect(Collectors.toList());
+
+                List<ParseProductCategory> catFromDb = new ArrayList<>();
+
+                for (int i = 0; i < categoriesNames.size() - 1; i++) {
+
+                    String catName = categoriesNames.get(i).getName();
+
+                    Optional<ParseProductCategory> catOpt = parseProductCategoryService.findByName(catName);
+
+                    if (catOpt.isPresent()) {
+
+
+                        catFromDb.add(catOpt.get());
+
+
+                    } else {
+
+                        ParseProductCategory parseProductCategory = new ParseProductCategory();
+                        parseProductCategory.setName(catName);
+
+
+                    }
+
+                }
+
+
+                int p = 0;
 
             }
         }
 
-            return Collections.emptyList();
+        return null;
     }
 
     private boolean checkAvailability(Document document) {
 
-        Element notAvailableProductEl = document.selectFirst("#cart-form > div.add2cart.mainPrice > span.price.nowrap.not-aviable");
+        Element notAvailableProductEl = document.selectFirst(AVAILABILITY_FLAG_CSS_QUERY);
 
         return Objects.isNull(notAvailableProductEl);
 
@@ -167,7 +236,7 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
     private List<String> getImages(Document document) {
 
-        Element element = document.selectFirst("body > div.main-block > div > div:nth-child(3) > div > article > div.product-image > div");
+        Element element = document.selectFirst(IMAGES_CSS_QUERY);
         if (Objects.nonNull(element)) {
             Elements imagesElems = element.select("a");
             if (!imagesElems.isEmpty()) {
@@ -239,7 +308,7 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
     private List<String> getVideos(Document document) {
 
-        Element videoElem = document.selectFirst("#overview > div.product-video");
+        Element videoElem = document.selectFirst(VIDEOS_DIV);
         if (Objects.nonNull(videoElem)) {
             Elements videosFramesEls = videoElem.select("iframe");
 
