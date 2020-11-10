@@ -3,10 +3,7 @@ package com.chiShoAutom.ParseServices;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class ParseServiceUtils {
@@ -57,9 +54,9 @@ public class ParseServiceUtils {
 
         //Exc
         //",
-        String[] badEndTiedChars = {"." , ",", ";" , ":" , "\""};
-        String[] badUntiedChars = {"(", ")", "", "" , "\""};
-        String[] badChars = {"-", "–", "!", ":", "(", ")", "|", ";", "\"" , ","};
+        String[] badEndTiedChars = {".", ",", ";", ":", "\""};
+        String[] badUntiedChars = {"(", ")", "", "", "\""};
+        String[] badChars = {"-", "–", "!", ":", "(", ")", "|", ";", "\"", ","};
 
         String[] badWords = {"с", "для", "из", "на", "под", "по", "от", "в", "и", "типа", "к"};
 
@@ -96,5 +93,26 @@ public class ParseServiceUtils {
             }
         }
         return retString;
+    }
+
+
+    public static <T> List<List<T>> getSubArraysMultiple(List<T> list, int mult) {
+        if (mult <= 0 || list.isEmpty()) return Collections.emptyList();
+
+        List<List<T>> listToRet = new ArrayList<>();
+        if (mult >= list.size()) {
+            listToRet.add(list);
+            return listToRet;
+        }
+        for (int i = 0; i <= Math.ceil(list.size() / mult); i++) {
+            int topPoint = ((i * mult) + mult);
+            if (topPoint < (list.size())) {
+                listToRet.add(list.subList((i * mult), topPoint));
+            } else {
+                if ((((i - 1) * mult) + mult) == list.size()) break;
+                listToRet.add(list.subList((i * mult), list.size()));
+            }
+        }
+        return listToRet;
     }
 }

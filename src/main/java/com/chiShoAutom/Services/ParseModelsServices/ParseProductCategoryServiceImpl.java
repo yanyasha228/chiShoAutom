@@ -34,4 +34,9 @@ public class ParseProductCategoryServiceImpl implements ParseProductCategoryServ
         return parseProductCategoryDao.save(parseProductCategory);
     }
 
+    @Override
+    public List<ParseProductCategory> saveAll(List<ParseProductCategory> parseProductCategories) {
+        return parseProductCategoryDao.saveAll(parseProductCategories);
+    }
+
 }

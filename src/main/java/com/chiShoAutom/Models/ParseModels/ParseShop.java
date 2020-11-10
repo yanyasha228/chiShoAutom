@@ -8,6 +8,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -36,6 +37,17 @@ public class ParseShop {
     private Set<ParseProductCategory> shopCategories = new HashSet<>();
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParseShop parseShop = (ParseShop) o;
+        return id == parseShop.id &&
+                shopUrl.equals(parseShop.shopUrl);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, shopUrl);
+    }
 }

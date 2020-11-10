@@ -3,8 +3,10 @@ package com.chiShoAutom.Models.ParseModels;
 import com.chiShoAutom.Models.ModelEnums.Currency;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
@@ -15,7 +17,7 @@ public class ParseProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @Column(name = "availability")
     private boolean availability;
@@ -24,7 +26,7 @@ public class ParseProduct {
     @JoinColumn(name = "parse_shop_id")
     private ParseShop parseShop;
 
-    @Column(name = "url")
+    @Column(name = "url", unique = true)
     private String url;
 
     @Column(name = "name")
@@ -68,4 +70,21 @@ public class ParseProduct {
     @ElementCollection
     private Set<String> videos= new HashSet<>();
 
+    @Column(name = "last_updating_date")
+    @DateTimeFormat(pattern = "dd-M-yyyy hh:mm")
+    private LocalDateTime lastUpdatingDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParseProduct that = (ParseProduct) o;
+        return id == that.id &&
+                url.equals(that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url);
+    }
 }

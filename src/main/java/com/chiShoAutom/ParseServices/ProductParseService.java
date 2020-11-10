@@ -1,6 +1,7 @@
 package com.chiShoAutom.ParseServices;
 
 import com.chiShoAutom.Models.ParseModels.ParseProduct;
+import com.chiShoAutom.Models.ParseModels.ParseShop;
 import com.chiShoAutom.Models.Product;
 
 import java.io.IOException;

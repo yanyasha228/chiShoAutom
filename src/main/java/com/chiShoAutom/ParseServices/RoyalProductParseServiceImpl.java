@@ -6,6 +6,7 @@ import com.chiShoAutom.Models.ParseModels.ParseProductCategory;
 import com.chiShoAutom.Models.ParseModels.ParseShop;
 import com.chiShoAutom.ParsUtils.CssQueryParser;
 import com.chiShoAutom.Services.ParseModelsServices.ParseProductCategoryService;
+import com.chiShoAutom.Services.ParseModelsServices.ParseProductService;
 import com.chiShoAutom.Services.ParseModelsServices.ParseShopService;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -13,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
@@ -49,17 +51,19 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
     private ParseProductCategoryService parseProductCategoryService;
 
     @Autowired
+    private ParseProductService parseProductService;
+
+    @Autowired
     private CssQueryParser cssQueryParser;
 
     @Autowired
     private ParseShopService parseShopService;
 
-
     private ParseShop getOrCreateParseShop() {
 
         Optional<ParseShop> royalParseShop = parseShopService.findByShopUrl(GOOD_TOYS_URL);
 
-        if(royalParseShop.isPresent()) return royalParseShop.get();
+        if (royalParseShop.isPresent()) return royalParseShop.get();
 
         ParseShop parseShop = new ParseShop();
 
@@ -67,11 +71,12 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
         parseShop.setWholeShopUrl(ROYAL_TOYS_URL);
 
-        return  parseShopService.save(parseShop);
+        return parseShopService.save(parseShop);
 
     }
 
 
+    @Transactional
     @Override
     public Optional<ParseProduct> getProduct(String productUrl) throws IOException {
 
@@ -81,7 +86,7 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
         if (pageDoc.isPresent()) {
 
-            ParseProduct parseProduct = new ParseProduct();
+            ParseProduct parseProduct = parseProductService.findByUrl(productUrl).orElse(new ParseProduct());
 
             parseProduct.setVendorCode(getVendorCode(pageDoc.get()));
 
@@ -109,10 +114,15 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
             parseProduct.setAvailability(checkAvailability(pageDoc.get()));
 
-            parseProduct.setParseProductCategory(getCategories(pageDoc.get()));
+            parseProduct.setParseProductCategory(getCategories(pageDoc.get(), royalParseShop));
 
             parseProduct.setParseShop(royalParseShop);
 
+            parseProductService.save(parseProduct);
+
+            royalParseShop.getParseProducts().add(parseProduct);
+
+            parseShopService.save(royalParseShop);
 
             return Optional.of(parseProduct);
 
@@ -127,24 +137,13 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
         for (String productUrl : productUrls) {
 
-            Optional<Document> pageDoc = cssQueryParser.getDocument(productUrl);
-
-            if (pageDoc.isPresent()) {
-
-                ParseProduct parseProduct = new ParseProduct();
-
-                parseProduct.setVendorCode(getVendorCode(pageDoc.get()));
-
-            }
-
         }
 
         return null;
 
     }
 
-
-    private ParseProductCategory getCategories(Document document) {
+    private ParseProductCategory getCategories(Document document, ParseShop parseShop) {
 
         Element categoryBlockElem = document.selectFirst(CATEGORIES_CSS_QUERY);
 
@@ -156,10 +155,11 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
                 List<Element> validCategories = categoriesElems.subList(1, categoriesElems.size() - 1);
 
-                List<ParseProductCategory> categoriesNames = validCategories.stream().map(element -> {
+                List<ParseProductCategory> categories = validCategories.stream().map(element -> {
                     ParseProductCategory parseProductCategory = new ParseProductCategory();
 
                     parseProductCategory.setName(element.text().replaceAll("\\|", "").trim());
+                    parseProductCategory.setParseShop(parseShop);
 
                     Element linkEl = element.selectFirst("a");
 
@@ -169,33 +169,35 @@ public class RoyalProductParseServiceImpl implements ProductParseService {
 
                 }).collect(Collectors.toList());
 
-                List<ParseProductCategory> catFromDb = new ArrayList<>();
+                List<ParseProductCategory> catPersisted = new ArrayList<>();
 
-                for (int i = 0; i < categoriesNames.size() - 1; i++) {
+                for (ParseProductCategory categoryFromPage : categories) {
 
-                    String catName = categoriesNames.get(i).getName();
+                    String catName = categoryFromPage.getName();
 
                     Optional<ParseProductCategory> catOpt = parseProductCategoryService.findByName(catName);
 
                     if (catOpt.isPresent()) {
 
-
-                        catFromDb.add(catOpt.get());
-
+                        catPersisted.add(catOpt.get());
 
                     } else {
-
-                        ParseProductCategory parseProductCategory = new ParseProductCategory();
-                        parseProductCategory.setName(catName);
-
-
+                        catPersisted.add(parseProductCategoryService.save(categoryFromPage));
                     }
 
                 }
 
+                ListIterator<ParseProductCategory> iteratorCat = catPersisted.listIterator();
 
-                int p = 0;
 
+                for (int it = 0; it < catPersisted.size(); it++) {
+                    if (it == 0) continue;
+                    catPersisted.get(it).setParentCategory(catPersisted.get(it - 1));
+                }
+
+                catPersisted = parseProductCategoryService.saveAll(catPersisted);
+
+                return catPersisted.get(catPersisted.size() - 1);
             }
         }
 

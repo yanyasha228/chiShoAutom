@@ -15,4 +15,6 @@ public interface ParseProductCategoryService {
 
     ParseProductCategory save(ParseProductCategory parseProductCategory);
 
+    List<ParseProductCategory> saveAll(List<ParseProductCategory> parseProductCategories);
+
 }

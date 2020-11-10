@@ -60,6 +60,7 @@ public class ProductRestPromServiceImpl implements ProductRestPromService {
                 map(productDto -> productMapper.toEntity(productDto)).collect(Collectors.toList());
     }
 
+
     @Override
     public List<Product> postProducts(List<Product> productList) {
 
